@@ -21,9 +21,42 @@ class User extends CI_Controller{
     public function add()
     {
         $data = array(
-            'title' => 'View Data User',
+            'title' => 'Tambah Data User',
             'content'=> 'user/add_form'
         );
-        $this->load->view('temple/main',$data);
+        $this->load->view('template/main',$data);
+    }
+    public function save()
+    {
+        $this->User_model->Save();
+        if($this->db->affected_rows()>0){
+            $this->session->set_flashdata("success", "Data user Berhasil Disimpan");
+        }
+        redirect('user');
+    }
+
+    public function getedit($id)
+    {
+        $data = array(
+            'title'=> 'Update Data user',
+            'user' => $this->User_model->getById($id),
+            'content'=> 'user/edit_form'
+        );
+        $this->load->view('template/main', $data);
+    }
+
+    public function edit()
+    {
+        $this->User_model->editData();
+        if($this->db->affected_rows()>0){
+            $this->session->set_flashdata("success","Data user Berhasil Diupdate");
+        }
+        redirect('user');
+    }
+
+    function delete($id)
+    {
+        $this->User_model->delete($id);
+        redirect('user');
     }
 }
